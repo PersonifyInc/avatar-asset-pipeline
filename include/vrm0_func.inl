@@ -1,5 +1,5 @@
 /* distributed under MIT license:
- * 
+ *
  * Copyright (c) 2021 Kota Iguchi
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -82,7 +82,8 @@ static void vrm0_store_blendshapes(const std::string name, cgltf_size mesh, cglt
     auto iter = blendshapes.find(name);
     if (iter != blendshapes.end()) {
         iter->second.push_back(item);
-    } else {
+    }
+    else {
         std::vector<cgltf_vrm_blendshape_bind_v0_0> items = { item };
         blendshapes.emplace(name, items);
     }
@@ -119,7 +120,8 @@ static void vrm0_ensure_floatProperties(const json& materialProperties_object, c
 
     if (data->materials[i].alpha_mode == cgltf_alpha_mode_blend) {
         floatProperties["_BlendMode"] = 1.f;
-    } else {
+    }
+    else {
         floatProperties["_BlendMode"] = 0.f;
     }
 
@@ -178,9 +180,11 @@ static void vrm0_ensure_mapProperties(const json& materialProperties_object, cgl
 
     if (data->materials[i].alpha_mode == cgltf_alpha_mode_opaque) {
         tagMap["RenderType"] = "Opaque";
-    } else if (data->materials[i].alpha_mode == cgltf_alpha_mode_mask) {
+    }
+    else if (data->materials[i].alpha_mode == cgltf_alpha_mode_mask) {
         tagMap["RenderType"] = "TransparentCutout";
-    } else if (data->materials[i].alpha_mode == cgltf_alpha_mode_blend) {
+    }
+    else if (data->materials[i].alpha_mode == cgltf_alpha_mode_blend) {
         tagMap["RenderType"] = "Transparent";
     }
 
@@ -276,7 +280,8 @@ static void vrm0_ensure_defaults(const json& output_config_object, cgltf_data* d
                 vrm0_ensure_vectorProperties(materialProperties_object, i, data);
                 vrm0_ensure_mapProperties(materialProperties_object, i, data);
 
-            } else {
+            }
+            else {
                 vrm->materialProperties[i].shader = gltf_alloc_chars("VRM_USE_GLTFSHADER");
             }
         }
@@ -290,36 +295,50 @@ static void vrm0_ensure_defaults(const json& output_config_object, cgltf_data* d
             const auto target_name = mesh->target_names[j];
             if (strcmp(target_name, "viseme_aa") == 0) {
                 vrm0_store_blendshapes("A", i, j, blendshapes);
-            } else if (strcmp(target_name, "viseme_I") == 0) {
+            }
+            else if (strcmp(target_name, "viseme_I") == 0) {
                 vrm0_store_blendshapes("I", i, j, blendshapes);
-            } else if (strcmp(target_name, "viseme_U") == 0) {
+            }
+            else if (strcmp(target_name, "viseme_U") == 0) {
                 vrm0_store_blendshapes("U", i, j, blendshapes);
-            } else if (strcmp(target_name, "viseme_E") == 0) {
+            }
+            else if (strcmp(target_name, "viseme_E") == 0) {
                 vrm0_store_blendshapes("E", i, j, blendshapes);
-            } else if (strcmp(target_name, "viseme_O") == 0) {
+            }
+            else if (strcmp(target_name, "viseme_O") == 0) {
                 vrm0_store_blendshapes("O", i, j, blendshapes);
-            } else if (strcmp(target_name, "eyeBlinkLeft") == 0) {
+            }
+            else if (strcmp(target_name, "eyeBlinkLeft") == 0) {
                 vrm0_store_blendshapes("Blink", i, j, blendshapes);
                 vrm0_store_blendshapes("Blink_L", i, j, blendshapes);
-            } else if (strcmp(target_name, "eyeBlinkRight") == 0) {
+            }
+            else if (strcmp(target_name, "eyeBlinkRight") == 0) {
                 vrm0_store_blendshapes("Blink", i, j, blendshapes);
                 vrm0_store_blendshapes("Blink_R", i, j, blendshapes);
-            } else if (strcmp(target_name, "browInnerUp") == 0) {
+            }
+            else if (strcmp(target_name, "browInnerUp") == 0) {
                 vrm0_store_blendshapes("Joy", i, j, blendshapes);
                 vrm0_store_blendshapes("Sorrow", i, j, blendshapes);
-            } else if (strcmp(target_name, "mouthSmile") == 0) {
+            }
+            else if (strcmp(target_name, "mouthSmile") == 0) {
                 vrm0_store_blendshapes("Joy", i, j, blendshapes);
-            } else if (strcmp(target_name, "browOuterUpLeft") == 0) {
+            }
+            else if (strcmp(target_name, "browOuterUpLeft") == 0) {
                 vrm0_store_blendshapes("Angry", i, j, blendshapes);
-            } else if (strcmp(target_name, "browOuterUpRight") == 0) {
+            }
+            else if (strcmp(target_name, "browOuterUpRight") == 0) {
                 vrm0_store_blendshapes("Angry", i, j, blendshapes);
-            } else if (strcmp(target_name, "eyeSquintLeft") == 0) {
+            }
+            else if (strcmp(target_name, "eyeSquintLeft") == 0) {
                 vrm0_store_blendshapes("Angry", i, j, blendshapes);
-            } else if (strcmp(target_name, "eyeSquintRight") == 0) {
+            }
+            else if (strcmp(target_name, "eyeSquintRight") == 0) {
                 vrm0_store_blendshapes("Angry", i, j, blendshapes);
-            } else if (strcmp(target_name, "mouthFrownLeft") == 0) {
+            }
+            else if (strcmp(target_name, "mouthFrownLeft") == 0) {
                 vrm0_store_blendshapes("Sorrow", i, j, blendshapes);
-            } else if (strcmp(target_name, "mouthFrownRight") == 0) {
+            }
+            else if (strcmp(target_name, "mouthFrownRight") == 0) {
                 vrm0_store_blendshapes("Sorrow", i, j, blendshapes);
             }
         }
@@ -331,7 +350,7 @@ static void vrm0_ensure_defaults(const json& output_config_object, cgltf_data* d
         const auto values = item.second;
         const auto store_size = values.size() * sizeof(cgltf_vrm_blendshape_bind_v0_0);
         const auto binds = (cgltf_vrm_blendshape_bind_v0_0*)gltf_calloc(store_size, 1);
-        memcpy_s(binds, store_size, values.data(), store_size);
+        memcpy(binds, values.data(), store_size);
         cgltf_vrm_blendshape_group_presetName_v0_0 preset_name;
         select_cgltf_vrm_blendshape_group_presetName_v0_0(gltf_str_tolower(item.first).c_str(), &preset_name);
         data->vrm_v0_0.blendShapeMaster.blendShapeGroups[index] = {
@@ -359,17 +378,17 @@ static void vrm0_ensure_defaults(const json& output_config_object, cgltf_data* d
             auto parent = joint->parent;
             bool found = false;
             GLTF_PARENT_LOOP_BEGIN(parent != nullptr)
-            if (skin->skeleton == parent) {
-                found = true;
-                break;
-            }
+                if (skin->skeleton == parent) {
+                    found = true;
+                    break;
+                }
             parent = parent->parent;
             GLTF_PARENT_LOOP_END
-            // SKIN_SKELETON_INVALID: Skeleton node is not a common root
-            if (!found) {
-                skin->skeleton = nullptr;
-                break;
-            }
+                // SKIN_SKELETON_INVALID: Skeleton node is not a common root
+                if (!found) {
+                    skin->skeleton = nullptr;
+                    break;
+                }
         }
     }
 }
@@ -388,35 +407,46 @@ static bool vrm0_update_meta(const json& meta_object, cgltf_vrm_v0_0* vrm)
         const auto value = value_str.c_str();
         if (key == "title") {
             meta->title = gltf_alloc_chars(value);
-        } else if (key == "version") {
+        }
+        else if (key == "version") {
             meta->version = gltf_alloc_chars(value);
-        } else if (key == "author") {
+        }
+        else if (key == "author") {
             meta->author = gltf_alloc_chars(value);
-        } else if (key == "contactInformation") {
+        }
+        else if (key == "contactInformation") {
             meta->contactInformation = gltf_alloc_chars(value);
-        } else if (key == "reference") {
+        }
+        else if (key == "reference") {
             meta->reference = gltf_alloc_chars(value);
-        } else if (key == "otherPermissionUrl") {
+        }
+        else if (key == "otherPermissionUrl") {
             meta->otherPermissionUrl = gltf_alloc_chars(value);
-        } else if (key == "otherLicenseUrl") {
+        }
+        else if (key == "otherLicenseUrl") {
             meta->otherLicenseUrl = gltf_alloc_chars(value);
-        } else if (key == "licenseName") {
+        }
+        else if (key == "licenseName") {
             if (!select_cgltf_vrm_meta_licenseName_v0_0(value, &meta->licenseName)) {
                 AVATAR_PIPELINE_LOG("[ERROR] Unknown " << key << ": " << value);
             }
-        } else if (key == "allowedUserName") {
+        }
+        else if (key == "allowedUserName") {
             if (!select_cgltf_vrm_meta_allowedUserName_v0_0(value, &meta->allowedUserName)) {
                 AVATAR_PIPELINE_LOG("[ERROR] Unknown " << key << ": " << value);
             }
-        } else if (key == "violentUssageName") {
+        }
+        else if (key == "violentUssageName") {
             if (!select_cgltf_vrm_meta_violentUssageName_v0_0(value, &meta->violentUssageName)) {
                 AVATAR_PIPELINE_LOG("[ERROR] Unknown " << key << ": " << value);
             }
-        } else if (key == "sexualUssageName") {
+        }
+        else if (key == "sexualUssageName") {
             if (!select_cgltf_vrm_meta_sexualUssageName_v0_0(value, &meta->sexualUssageName)) {
                 AVATAR_PIPELINE_LOG("[ERROR] Unknown " << key << ": " << value);
             }
-        } else if (key == "commercialUssageName") {
+        }
+        else if (key == "commercialUssageName") {
             if (!select_cgltf_vrm_meta_commercialUssageName_v0_0(value, &meta->commercialUssageName)) {
                 AVATAR_PIPELINE_LOG("[ERROR] Unknown " << key << ": " << value);
             }
@@ -489,7 +519,8 @@ static bool vrm0_update_bones(AvatarBuild::bone_mappings* mappings, cgltf_data* 
             if (bone_name == "Head") {
                 vrm->firstPerson.firstPersonBone = found->second;
             }
-        } else {
+        }
+        else {
             AVATAR_PIPELINE_LOG("[ERROR] bone is not found for " << bone_name);
         }
 

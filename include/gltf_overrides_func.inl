@@ -1,5 +1,5 @@
 /* distributed under MIT license:
- * 
+ *
  * Copyright (c) 2021 Kota Iguchi
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -32,15 +32,19 @@ static bool gltf_override_material_values(json& values, cgltf_material* material
             const auto value = value_object.get<std::string>();
             if (value == "OPAQUE") {
                 material->alpha_mode = cgltf_alpha_mode_opaque;
-            } else if (value == "MASK") {
+            }
+            else if (value == "MASK") {
                 material->alpha_mode = cgltf_alpha_mode_mask;
-            } else if (value == "BLEND") {
+            }
+            else if (value == "BLEND") {
                 material->alpha_mode = cgltf_alpha_mode_blend;
-            } else {
+            }
+            else {
                 AVATAR_PIPELINE_LOG("[WARN] Unknown alphaMode: " << value);
                 continue;
             }
-        } else if (item.key() == "doubleSided" && value_object.is_boolean()) {
+        }
+        else if (item.key() == "doubleSided" && value_object.is_boolean()) {
             material->double_sided = value_object.get<bool>();
         }
     }
@@ -76,13 +80,14 @@ static bool gltf_read_image_from_file(fs::path file, cgltf_image* image, cgltf_b
         const auto size = raw.size();
         image->buffer_view->size = size;
         image->buffer_view->data = (uint8_t*)gltf_calloc(1, size);
-        memcpy_s(image->buffer_view->data, size, raw.data(), size);
+        memcpy(image->buffer_view->data, raw.data(), size);
         image_data.close();
 
         if (image->buffer_view->name == nullptr) {
             image->buffer_view->name = gltf_alloc_chars(file.stem().u8string().c_str());
         }
-    } else {
+    }
+    else {
         return false;
     }
 

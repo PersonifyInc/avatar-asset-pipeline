@@ -6,6 +6,10 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 file(GLOB pipeline_FILES components/*.hpp)
 
+if (APPLE)
+  set(CMAKE_CXX_FLAGS "-std=c++11")
+endif()
+
 set(SRC_FILES
   src/main.cpp
   include/json_func.inl
@@ -64,7 +68,11 @@ if(MSVC)
     target_compile_options(${EXE_NAME} PRIVATE /W4 /WX)
     add_definitions( -D_CRT_SECURE_NO_WARNINGS)
 else()
-    target_compile_options(${EXE_NAME} PRIVATE -Wall -Wextra -pedantic -Werror)
+  if (APPLE)
+    target_compile_options(${EXE_NAME} PRIVATE -Wall -Wextra -pedantic )
+  else()
+    target_compile_options(${EXE_NAME} PRIVATE -Wall -Wextra -pedantic -Werror )
+  endif()
 endif()
 install( TARGETS ${EXE_NAME} RUNTIME DESTINATION bin )
 

@@ -6,18 +6,18 @@ Avatar asset pipeline is a tool to create continuous integration build pipelines
 
 ## Background
 
-![The Tower of Babel](docs/The_Tower_of_Babel.jpg)  
+![The Tower of Babel](docs/The_Tower_of_Babel.jpg)
 
 <sub>[The Tower of Babel (Vienna) By Pieter Brueghel the Elder - Google Cultural Institute](https://commons.wikimedia.org/w/index.php?curid=22178101)</sub>
 
-> According to the story, a united human race in the generations following the Great Flood, speaking a single language and migrating eastward, comes to the land of Shinar. There they agree to build a city and a tower tall enough to reach heaven. God, observing their city and tower, confounds their speech so that they can no longer understand each other, and scatters them around the world. 
+> According to the story, a united human race in the generations following the Great Flood, speaking a single language and migrating eastward, comes to the land of Shinar. There they agree to build a city and a tower tall enough to reach heaven. God, observing their city and tower, confounds their speech so that they can no longer understand each other, and scatters them around the world.
 
 Avatar asset pipeline is aiming to help common workflows for both 3D artist and avatar asset user. For instance avatar pipeline helps you to:
 
-* Create multiple LOD (Level of Details) assets in order to support multiple platforms such as standalone VR headset device like Oculus Quest, while preserving your original asset clean
-* Create T-pose asset from A-pose asset so 3D artist don't have to do it manually every time asset is updated
-* Create glTF asset using 3rd party vendor extensions such as VRM without using Unity nor other 3D DCC tools at all
-* Integrate build pipeline onto your CI build environment as everything can be done on command line interface with easy-to-read-and-update JSON configurations.
+- Create multiple LOD (Level of Details) assets in order to support multiple platforms such as standalone VR headset device like Oculus Quest, while preserving your original asset clean
+- Create T-pose asset from A-pose asset so 3D artist don't have to do it manually every time asset is updated
+- Create glTF asset using 3rd party vendor extensions such as VRM without using Unity nor other 3D DCC tools at all
+- Integrate build pipeline onto your CI build environment as everything can be done on command line interface with easy-to-read-and-update JSON configurations.
 
 ![figure004](docs/figure004.png)
 
@@ -31,14 +31,14 @@ Check out `pipelines` directory for working pipeline examples in practice.
 
 ## Options
 
-* `--pipeline`: Pipeline configuration file name (JSON);
-* `--verbose`: verbose Verbose log output
-* `--debug`: Enable debug output (such as JSON dump)
-* `--input`: Input file name
-* `--output` "Output file name
-* `--input_config`: Input configuration file name (JSON)
-* `--output_config`: Output configuration file name (JSON)
-* `--fbx2gltf`: Path to fbx2gltf executable
+- `--pipeline`: Pipeline configuration file name (JSON);
+- `--verbose`: verbose Verbose log output
+- `--debug`: Enable debug output (such as JSON dump)
+- `--input`: Input file name
+- `--output` "Output file name
+- `--input_config`: Input configuration file name (JSON)
+- `--output_config`: Output configuration file name (JSON)
+- `--fbx2gltf`: Path to fbx2gltf executable
 
 ## Features
 
@@ -79,24 +79,22 @@ Check out `pipelines` directory for working pipeline examples in practice.
 
 ```json
 {
-  "name":"glb_T_pose",
-  "description":"T-pose from A-pose glTF binary (.glb)",
-  "pipelines":[
+  "name": "glb_T_pose",
+  "description": "T-pose from A-pose glTF binary (.glb)",
+  "pipelines": [
     {
-      "name":"gltf_pipeline",
-      "components":[
-        "glb_T_pose"
-      ]
+      "name": "gltf_pipeline",
+      "components": ["glb_T_pose"]
     }
   ]
 }
-````
+```
 
 ```
 > avatar-build.exe --pipeline pipelines/glb_T_pose.json --debug -v --input_config models/input.readyplayerme.json -i models/readyplayerme-feminine.glb -o models/readyplayerme-feminine.Tpose.glb
-````
+```
 
-*glb_T_pose* component can be used to change default pose. Pose configuration can be specified by input config (`--input_config`). Checkout `models/input.*.json` for commonly used configurations. Following example defines "T" pose, there are `rotation` configurations in order to make current pose to "T" pose. All rotations are quaternions and *multiplied* to current rotations when `glb_T_pose` is executed. Bone naming conventions are described in [bone naming conventions](#bone-naming-conventions) section. Note that all animations are removed after glb_T_pose because animation "baking" is not working well with default pose changes.
+_glb_T_pose_ component can be used to change default pose. Pose configuration can be specified by input config (`--input_config`). Checkout `models/input.*.json` for commonly used configurations. Following example defines "T" pose, there are `rotation` configurations in order to make current pose to "T" pose. All rotations are quaternions and _multiplied_ to current rotations when `glb_T_pose` is executed. Bone naming conventions are described in [bone naming conventions](#bone-naming-conventions) section. Note that all animations are removed after glb_T_pose because animation "baking" is not working well with default pose changes.
 
 ```js
 "poses":{
@@ -125,19 +123,16 @@ Check out `pipelines` directory for working pipeline examples in practice.
 
 ### Convert A-pose to T-pose glTF binary (.glb) and apply all node transforms
 
-*glb_transforms_apply* component applies all node transforms to make sure nodes have no scale and rotation.
+_glb_transforms_apply_ component applies all node transforms to make sure nodes have no scale and rotation.
 
 ```json
 {
-  "name":"glb_T_pose",
-  "description":"T-pose from A-pose glTF binary (.glb) and make bones mo-cap ready",
-  "pipelines":[
+  "name": "glb_T_pose",
+  "description": "T-pose from A-pose glTF binary (.glb) and make bones mo-cap ready",
+  "pipelines": [
     {
-      "name":"gltf_pipeline",
-      "components":[
-        "glb_T_pose",
-        "glb_transforms_apply"
-      ]
+      "name": "gltf_pipeline",
+      "components": ["glb_T_pose", "glb_transforms_apply"]
     }
   ]
 }
@@ -147,14 +142,12 @@ Check out `pipelines` directory for working pipeline examples in practice.
 
 ```json
 {
-  "name":"fbx2glb",
-  "description":"Convert FBX to glTF binary (.glb)",
-  "pipelines":[
+  "name": "fbx2glb",
+  "description": "Convert FBX to glTF binary (.glb)",
+  "pipelines": [
     {
-      "name":"fbx_pipeline",
-      "components":[
-        "fbx2gltf_execute"
-      ]
+      "name": "fbx_pipeline",
+      "components": ["fbx2gltf_execute"]
     }
   ]
 }
@@ -172,12 +165,12 @@ Conversion of FBX to glTF using `fbx_pipeline` requires [FBX2glTF executable](ht
 
 ```json
 {
-  "name":"glb2vrm0_T_pose",
-  "description":"Convert A-pose to T-pose, glTF binary (.glb) to VRM spec 0.0",
-  "pipelines":[
+  "name": "glb2vrm0_T_pose",
+  "description": "Convert A-pose to T-pose, glTF binary (.glb) to VRM spec 0.0",
+  "pipelines": [
     {
-      "name":"gltf_pipeline",
-      "components":[
+      "name": "gltf_pipeline",
+      "components": [
         "glb_T_pose",
         "glb_transforms_apply",
         "glb_z_reverse",
@@ -193,7 +186,7 @@ Conversion of FBX to glTF using `fbx_pipeline` requires [FBX2glTF executable](ht
 > avatar-build.exe --pipeline pipelines/glb2vrm0_T_pose.json --debug --output_config models/output.vrm0.json -v --input_config models/input.readyplayerme.json -i models/readyplayerme-feminine.glb -o models/readyplayerme-feminine.vrm
 ```
 
-*vrm0_fix_joint_buffer* component is practically needed for VRM spec 0.0 because UniVRM (VRM spec 0.0 reference implementation) does not support unsigned short joint buffer until UniVRM v0.68.0.
+_vrm0_fix_joint_buffer_ component is practically needed for VRM spec 0.0 because UniVRM (VRM spec 0.0 reference implementation) does not support unsigned short joint buffer until UniVRM v0.68.0.
 
 ### Convert glTF binary (.glb) to VRM spec 0.0, forcing all jpeg textures to png
 
@@ -201,12 +194,12 @@ This has been needed to support platforms that do not enable jpeg texture such a
 
 ```json
 {
-  "name":"glb2vrm0",
-  "description":"Convert glTF binary (.glb) to VRM spec 0.0, forcing all jpeg textures to png",
-  "pipelines":[
+  "name": "glb2vrm0",
+  "description": "Convert glTF binary (.glb) to VRM spec 0.0, forcing all jpeg textures to png",
+  "pipelines": [
     {
-      "name":"gltf_pipeline",
-      "components":[
+      "name": "gltf_pipeline",
+      "components": [
         "glb_transforms_apply",
         "glb_z_reverse",
         "glb_jpeg_to_png",
@@ -232,7 +225,7 @@ This has been needed to support platforms that do not enable jpeg texture such a
       "components":[
         "fbx2gltf_execute"
       ]
-    }, 
+    },
     {
       "name":"gltf_pipeline",
       "components":[
@@ -256,16 +249,16 @@ avatar asset pipeline assumes bone names to use [Human Body Bones](https://docs.
 > First you should give your bones meaningful base-names, like “leg”, “arm”, “finger”, “back”, “foot”, etc.
 > If you have a bone that has a copy on the other side (a pair), like an arm, give it one of the following separators:
 >
-> * Left/right separators can be either the second position “L_calfbone” or last-but-one “calfbone.R”.
-> * If there is a lower or upper case “L”, “R”, “left” or “right”, Blender handles the counterpart correctly. See below for a list of valid separators. Pick one and stick to it as close as possible when rigging; it will pay off.
+> - Left/right separators can be either the second position “L_calfbone” or last-but-one “calfbone.R”.
+> - If there is a lower or upper case “L”, “R”, “left” or “right”, Blender handles the counterpart correctly. See below for a list of valid separators. Pick one and stick to it as close as possible when rigging; it will pay off.
 >
 > Examples of valid separators:
 >
-> * (nothing): handLeft –> handRight
-> * “_” (underscore): hand_L –> hand_R
-> * “.” (dot): hand.l –> hand.r
-> * “-” (dash): hand-l –> hand-r
->* ” ” (space): hand LEFT –> hand RIGHT
+> - (nothing): handLeft –> handRight
+> - “\_” (underscore): hand_L –> hand_R
+> - “.” (dot): hand.l –> hand.r
+> - “-” (dash): hand-l –> hand-r
+> - ” ” (space): hand LEFT –> hand RIGHT
 
 <sub>https://docs.blender.org/manual/en/latest/animation/armatures/bones/editing/naming.html</sub>
 
@@ -298,7 +291,7 @@ You can explicitly specify bone naming conversions by using `--input_config` opt
 
 ## Material properties override (Experimental)
 
-In output configuration file (which can be specified by `--output_config` option) you can override some material properties using `overrides` property. In order to select material which you want to override you can set `rules` by standard regular expressions. Following example shows a rule to search for the material that contains *_MAT* in its `name` property following numeric value in suffix. The `values` property is the values to override. Currently `alphaMode` and `doubleSided` property values can be overridden (all conversion logic are inside `gltf_override_material_values` function in `gltf_overrides_func.inl` for now)
+In output configuration file (which can be specified by `--output_config` option) you can override some material properties using `overrides` property. In order to select material which you want to override you can set `rules` by standard regular expressions. Following example shows a rule to search for the material that contains _\_MAT_ in its `name` property following numeric value in suffix. The `values` property is the values to override. Currently `alphaMode` and `doubleSided` property values can be overridden (all conversion logic are inside `gltf_override_material_values` function in `gltf_overrides_func.inl` for now)
 
 ```js
 "overrides": {
@@ -317,7 +310,7 @@ In output configuration file (which can be specified by `--output_config` option
 
 ### Find and load external material textures
 
-When you use FBX, materials can be defined as external texture image asset and the conversion tool `FBX2glTF` tend to fail to fetch those textures. In order to fetch these missing textures, you can use `find_missing_textures_from` property. It searches for the textures in given directory and tries to load it as glTF buffer. For instance following configuration shows that material textures under `Missing.Textures` directory to be loaded as `f001_body` material.  It searches for the missing textures based on glTF `name` property in following order: 1. `image.name` that is linked to the material, 2. `texture.name` that is linked to the material, 3. `material.name`. It also takes *"_color"* suffix into account. Note that only png and jpg textures are supported for now.
+When you use FBX, materials can be defined as external texture image asset and the conversion tool `FBX2glTF` tend to fail to fetch those textures. In order to fetch these missing textures, you can use `find_missing_textures_from` property. It searches for the textures in given directory and tries to load it as glTF buffer. For instance following configuration shows that material textures under `Missing.Textures` directory to be loaded as `f001_body` material. It searches for the missing textures based on glTF `name` property in following order: 1. `image.name` that is linked to the material, 2. `texture.name` that is linked to the material, 3. `material.name`. It also takes _"\_color"_ suffix into account. Note that only png and jpg textures are supported for now.
 
 ```js
 "overrides": {
@@ -339,8 +332,8 @@ So let say if you have following glTF property, the configuration above searches
 2. "Image #01_color" (.png, .jpg, .jpeg )
 3. "Texture #01" (.png, .jpg, .jpeg )
 4. "Texture #01_color" (.png, .jpg, .jpeg )
-3. "f001_body" (.png, .jpg, .jpeg )
-4. "f001_body_color" (.png, .jpg, .jpeg )
+5. "f001_body" (.png, .jpg, .jpeg )
+6. "f001_body_color" (.png, .jpg, .jpeg )
 
 ```js
 "images": [
@@ -408,52 +401,52 @@ So let say if you have following glTF property, the configuration above searches
 }
 ```
 
- You can setup optimization configuration by editing `gltfpack` property section in output config file. For instance in following JSON config, the `LOD` property defines multiple Level of Details (LOD0, LOD1, LOD2) with simplify threshold (0.3, 0.5, 0.7). For options and more information check out [meshoptimizer](https://github.com/infosia/meshoptimizer/) and [gltfpack](https://github.com/infosia/meshoptimizer/tree/VRM/gltf#-gltfpack) documents.
+You can setup optimization configuration by editing `gltfpack` property section in output config file. For instance in following JSON config, the `LOD` property defines multiple Level of Details (LOD0, LOD1, LOD2) with simplify threshold (0.3, 0.5, 0.7). For options and more information check out [meshoptimizer](https://github.com/infosia/meshoptimizer/) and [gltfpack](https://github.com/infosia/meshoptimizer/tree/VRM/gltf#-gltfpack) documents.
 
- ```js
- {
-  "gltfpack": {
-    "LOD": [
-      {
-        "name": "LOD2",
-        "simplify_threshold": 0.7,
-        "simplify_aggressive": false
-      },
-      {
-        "name": "LOD1",
-        "simplify_threshold": 0.5,
-        "simplify_aggressive": false
-      },
-      {
-        "name": "LOD0",
-        "simplify_threshold": 0.3,
-        "simplify_aggressive": false
-      }
-    ],
-    "defaults": {
-      "verbose": true,
-      "quantize": false,
-      "use_uint8_joints": false, // Force use of float for joint buffer. Required for VRM (Before UniVRM 0.68)
-      "use_uint8_weights": false, // Force use of float for weight buffer. Required for VRM (Before UniVRM 0.70)
-      "keep_extras": true,
-      "keep_materials": false,
-      "keep_nodes": false
-    }
-  }
-  ...
+```js
+{
+ "gltfpack": {
+   "LOD": [
+     {
+       "name": "LOD2",
+       "simplify_threshold": 0.7,
+       "simplify_aggressive": false
+     },
+     {
+       "name": "LOD1",
+       "simplify_threshold": 0.5,
+       "simplify_aggressive": false
+     },
+     {
+       "name": "LOD0",
+       "simplify_threshold": 0.3,
+       "simplify_aggressive": false
+     }
+   ],
+   "defaults": {
+     "verbose": true,
+     "quantize": false,
+     "use_uint8_joints": false, // Force use of float for joint buffer. Required for VRM (Before UniVRM 0.68)
+     "use_uint8_weights": false, // Force use of float for weight buffer. Required for VRM (Before UniVRM 0.70)
+     "keep_extras": true,
+     "keep_materials": false,
+     "keep_nodes": false
+   }
+ }
+ ...
 }
- ```
+```
 
 ## License
 
-* Available to anybody free of charge, under the terms of MIT License (see LICENSE).
+- Available to anybody free of charge, under the terms of MIT License (see LICENSE).
 
 ## Building
 
 You need [Cmake](https://cmake.org/download/) and Visual Studio with C++ environment installed. There is a CMakeLists.txt file which has been tested with [Cmake](https://cmake.org/download/) on Windows. For instance in order to generate a Visual Studio 10 project, run cmake like this:
 
-
 ```
 > mkdir build; cd build
-> cmake -G "Visual Studio 10" ..
+> windows: cmake -G "Visual Studio 10" ..
+> macOS: cmake -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ../ && make -j12
 ```

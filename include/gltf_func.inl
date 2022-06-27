@@ -1,5 +1,5 @@
 /* distributed under MIT license:
- * 
+ *
  * Copyright (c) 2021 Kota Iguchi
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -34,7 +34,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
-// avoid infinite loop on node tree traversal
+ // avoid infinite loop on node tree traversal
 #define GLTF_PARENT_LOOP_BEGIN(CONDITION) { std::uint16_t COUNTER=0; while (CONDITION) { ++COUNTER; if (COUNTER > 256) {AVATAR_PIPELINE_LOG("[WARNING] infinite loop detected at parent loop"); break;}
 #define GLTF_PARENT_LOOP_END }}
 
@@ -63,7 +63,7 @@ static char* gltf_alloc_chars(const char* str)
         return (char*)gltf_calloc(1, 1);
 
     auto dst = (char*)gltf_calloc(length + 1, sizeof(char));
-    if (dst > 0)
+    if (dst != nullptr)
         strncpy(dst, str, length);
 
     return dst;
@@ -76,13 +76,25 @@ static std::string gltf_str_tolower(std::string s)
     return s;
 }
 
+inline std::wstring ConvertEncoding(const std::string& normalString)
+{
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> convert;
+    return convert.from_bytes(normalString);
+}
+
+inline std::string ConvertEncodingBack(const std::wstring& wideString)
+{
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> convert;
+    return convert.to_bytes(wideString);
+}
+
 static cgltf_result gltf_wstring_file_read(const struct cgltf_memory_options* memory_options, const struct cgltf_file_options* file_options, const std::wstring path, cgltf_size* size, void** data)
 {
     (void)file_options;
     void* (*memory_alloc)(void*, cgltf_size) = memory_options->alloc ? memory_options->alloc : &cgltf_default_alloc;
     void (*memory_free)(void*, void*) = memory_options->free ? memory_options->free : &cgltf_default_free;
 
-    FILE* file = _wfopen(path.c_str(), L"rb");
+    FILE* file = fopen(ConvertEncodingBack(path).c_str(), "rb");
 
     if (!file) {
         return cgltf_result_file_not_found;
@@ -229,9 +241,10 @@ static bool gltf_create_buffer(cgltf_data* data)
             if (data->buffer_views[i].buffer == buffer) {
                 const auto size_to_copy = buffer_view->size;
                 if (buffer_view->data != nullptr) {
-                    memcpy_s(buffer_dst, size_to_copy, buffer_view->data, size_to_copy);
-                } else {
-                    memcpy_s(buffer_dst, size_to_copy, ((uint8_t*)buffer_view->buffer->data + buffer_view->offset), size_to_copy);
+                    memcpy(buffer_dst, buffer_view->data, size_to_copy);
+                }
+                else {
+                    memcpy(buffer_dst, ((uint8_t*)buffer_view->buffer->data + buffer_view->offset), size_to_copy);
                 }
                 buffer_view->offset = (buffer_dst - buffer_data);
                 buffer_dst += (size_to_copy + 3) & ~3;
@@ -370,7 +383,8 @@ static void gltf_reverse_z(cgltf_data* data)
                 }
                 if (attr->type == cgltf_attribute_type_position) {
                     gltf_reverse_z_accessor(accessor);
-                } else if (attr->type == cgltf_attribute_type_normal) {
+                }
+                else if (attr->type == cgltf_attribute_type_normal) {
                     gltf_reverse_z_accessor(accessor);
                 }
                 accessor_coord_done.emplace(accessor);
@@ -386,7 +400,8 @@ static void gltf_reverse_z(cgltf_data* data)
                     }
                     if (attr->type == cgltf_attribute_type_position) {
                         gltf_reverse_z_accessor(accessor);
-                    } else if (attr->type == cgltf_attribute_type_normal) {
+                    }
+                    else if (attr->type == cgltf_attribute_type_normal) {
                         gltf_reverse_z_accessor(accessor);
                     }
                     accessor_coord_done.emplace(accessor);
@@ -501,12 +516,12 @@ static glm::mat4 gltf_get_global_node_transform(const cgltf_node* node)
 {
     auto m = gltf_get_node_transform(node);
     cgltf_node* parent = node->parent;
-    GLTF_PARENT_LOOP_BEGIN (parent != nullptr)
+    GLTF_PARENT_LOOP_BEGIN(parent != nullptr)
         m = gltf_get_node_transform(parent) * m;
-        parent = parent->parent;
+    parent = parent->parent;
     GLTF_PARENT_LOOP_END
 
-    return m;
+        return m;
 }
 
 static void gltf_apply_transform_meshes(cgltf_data* data)
@@ -531,7 +546,8 @@ static void gltf_apply_transform_meshes(cgltf_data* data)
                 }
                 if (attr->type == cgltf_attribute_type_position) {
                     gltf_apply_transform_accessor(node, accessor);
-                } else if (attr->type == cgltf_attribute_type_normal) {
+                }
+                else if (attr->type == cgltf_attribute_type_normal) {
                     gltf_apply_transform_accessor(node, accessor);
                 }
                 accessor_coord_done.emplace(accessor);
@@ -547,7 +563,8 @@ static void gltf_apply_transform_meshes(cgltf_data* data)
                     }
                     if (attr->type == cgltf_attribute_type_position) {
                         gltf_apply_transform_accessor(node, accessor);
-                    } else if (attr->type == cgltf_attribute_type_normal) {
+                    }
+                    else if (attr->type == cgltf_attribute_type_normal) {
                         gltf_apply_transform_accessor(node, accessor);
                     }
                     accessor_coord_done.emplace(accessor);
@@ -734,11 +751,14 @@ static bool gltf_skinning(cgltf_data* data)
                 const auto attr = &primitive->attributes[k];
                 if (attr->type == cgltf_attribute_type_position) {
                     acc_POSITION = attr->data;
-                } else if (attr->type == cgltf_attribute_type_normal) {
+                }
+                else if (attr->type == cgltf_attribute_type_normal) {
                     acc_NORMAL = attr->data;
-                } else if (attr->type == cgltf_attribute_type_joints) {
+                }
+                else if (attr->type == cgltf_attribute_type_joints) {
                     acc_JOINTS = attr->data;
-                } else if (attr->type == cgltf_attribute_type_weights) {
+                }
+                else if (attr->type == cgltf_attribute_type_weights) {
                     acc_WEIGHTS = attr->data;
                 }
             }
@@ -768,17 +788,17 @@ static void gltf_apply_transforms(cgltf_data* data, std::unordered_map<std::stri
         const auto bone_hips = hips_found->second;
         glm::vec3 offset_translation = { 0, 0, 0 };
         auto node = bone_hips->parent;
-        GLTF_PARENT_LOOP_BEGIN (node != nullptr)
+        GLTF_PARENT_LOOP_BEGIN(node != nullptr)
             offset_translation.x += node->translation[0];
-            offset_translation.y += node->translation[1];
-            offset_translation.z += node->translation[2];
+        offset_translation.y += node->translation[1];
+        offset_translation.z += node->translation[2];
 
-            node->translation[0] = 0;
-            node->translation[1] = 0;
-            node->translation[2] = 0;
-            node = node->parent;
+        node->translation[0] = 0;
+        node->translation[1] = 0;
+        node->translation[2] = 0;
+        node = node->parent;
         GLTF_PARENT_LOOP_END
-        bone_hips->translation[0] += offset_translation.x;
+            bone_hips->translation[0] += offset_translation.x;
         bone_hips->translation[1] += offset_translation.y;
         bone_hips->translation[2] += offset_translation.z;
     }
@@ -850,7 +870,7 @@ static void gltf_png_write_func(void* context, void* buffer, int size)
         gltf_free(image->buffer_view->data);
 
     uint8_t* buffer_dst = (uint8_t*)gltf_calloc(1, size);
-    memcpy_s(buffer_dst, size, buffer, size);
+    memcpy(buffer_dst, buffer, size);
 
     image->buffer_view->data = buffer_dst;
     image->buffer_view->size = size;

@@ -111,8 +111,8 @@ public:
 protected:
     virtual void Process_( SignalBus const&, SignalBus& ) = 0;
 
-    void SetInputCount_( int inputCount, std::vector<std::string> const& inputNames = {} );
-    void SetOutputCount_( int outputCount, std::vector<std::string> const& outputNames = {} );
+    void SetInputCount_( int inputCount, std::vector<std::string> const& inputNames = std::vector<std::string>() );
+    void SetOutputCount_( int outputCount, std::vector<std::string> const& outputNames = std::vector<std::string>() );
 
 private:
     std::unique_ptr<internal::Component> p;
