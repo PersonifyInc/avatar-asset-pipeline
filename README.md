@@ -448,5 +448,5 @@ You need [Cmake](https://cmake.org/download/) and Visual Studio with C++ environ
 ```
 > mkdir build; cd build
 > windows: cmake -G "Visual Studio 10" ..
-> macOS: cmake -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" ../ && make -j12
+> macOS: cmake -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -G "Xcode" ../ && xcodebuild clean -project avatar-asset-pipeline.xcodeproj -configuration Release build
 ```
