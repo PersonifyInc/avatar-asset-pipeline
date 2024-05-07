@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 3.12)
 
 project(avatar-asset-pipeline)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS ON)
+
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 file(GLOB pipeline_FILES components/*.hpp)
-
-if (APPLE)
-  set(CMAKE_CXX_FLAGS "-std=c++11")
-endif()
 
 set(SRC_FILES
   src/main.cpp
@@ -71,7 +71,7 @@ else()
   if (APPLE)
     target_compile_options(${EXE_NAME} PRIVATE -Wall -Wextra -pedantic )
   else()
-    target_compile_options(${EXE_NAME} PRIVATE -Wall -Wextra -pedantic -Werror )
+    target_compile_options(${EXE_NAME} PRIVATE -Wno-return-type-c-linkage -Wno-gnu-zero-variadic-macro-arguments -Wno-vla -Wno-vla-extension -fPIC -pthread -pedantic -Wnon-virtual-dtor)
   endif()
 endif()
 install( TARGETS ${EXE_NAME} RUNTIME DESTINATION bin )

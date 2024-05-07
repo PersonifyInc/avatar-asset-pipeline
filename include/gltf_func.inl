@@ -88,6 +88,7 @@ inline std::string ConvertEncodingBack(const std::wstring& wideString)
     return convert.to_bytes(wideString);
 }
 
+#ifdef WIN32
 static cgltf_result gltf_wstring_file_read(const struct cgltf_memory_options* memory_options, const struct cgltf_file_options* file_options, const std::wstring path, cgltf_size* size, void** data)
 {
     (void)file_options;
@@ -145,6 +146,7 @@ static cgltf_result gltf_file_read(const struct cgltf_memory_options* memory_opt
     std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
     return gltf_wstring_file_read(memory_options, file_options, converter.from_bytes(path), size, data);
 }
+#endif
 
 static void gltf_f3_min(cgltf_float* a, cgltf_float* b, cgltf_float* out)
 {
