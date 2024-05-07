@@ -264,7 +264,7 @@ static bool gltf_override_materials(json& materials_override, cgltf_data* data, 
 
 static bool gltf_override_parameters(json& overrides_object, cgltf_data* data, AvatarBuild::cmd_options* options)
 {
-    (void)data, overrides_object;
+    (void)data, (void)overrides_object;
     auto materials_overrides = overrides_object["materials"];
     if (materials_overrides.is_array()) {
         for (auto item : materials_overrides) {
