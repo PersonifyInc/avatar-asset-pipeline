@@ -304,6 +304,11 @@ static bool gltf_upcast_joints(cgltf_data* data)
 
 static void gltf_reverse_z_accessor(cgltf_accessor* accessor)
 {
+    if (accessor->buffer_view == nullptr)
+    {
+        return;
+    }
+
     uint8_t* buffer_data = (uint8_t*)accessor->buffer_view->buffer->data + accessor->buffer_view->offset + accessor->offset;
 
     accessor->max[0] = -FLT_MAX;
@@ -323,6 +328,11 @@ static void gltf_reverse_z_accessor(cgltf_accessor* accessor)
 
 static void gltf_apply_transform_accessor(cgltf_node* node, cgltf_accessor* accessor)
 {
+    if (accessor->buffer_view == nullptr)
+    {
+        return;
+    }
+
     uint8_t* buffer_data = (uint8_t*)accessor->buffer_view->buffer->data + accessor->buffer_view->offset + accessor->offset;
 
     accessor->max[0] = -FLT_MAX;
